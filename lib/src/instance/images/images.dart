@@ -86,6 +86,8 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }) async {
     final String generations = "/generations";
 
+    print("model: ${model?.value}");
+
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(endpoint + generations),
       onSuccess: (json) => OpenAIImageModel.fromMap(json),
