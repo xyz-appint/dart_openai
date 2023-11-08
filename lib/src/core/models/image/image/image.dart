@@ -26,11 +26,20 @@ final class OpenAIImageModel {
 
   /// This method is used to convert a [Map<String, dynamic>] object to a [OpenAIImageModel] object.
   factory OpenAIImageModel.fromMap(Map<String, dynamic> json) {
-    return OpenAIImageModel(
-      created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
-      data: (json['data'] as List)
+    var created = DateTime.now();
+    if(json['created'] != null) {
+      created = DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000);
+    }
+    List<OpenAIImageData> data = [];
+    if(json['data']!= null) {
+      data = (json['data'] as List)
           .map((e) => OpenAIImageData.fromMap(e))
-          .toList(),
+          .toList();
+    }
+
+    return OpenAIImageModel(
+      created: created,
+      data: data,
     );
   }
 
