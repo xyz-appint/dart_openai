@@ -86,7 +86,14 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }) async {
     final String generations = "/generations";
 
-    print("model: ${model?.value}");
+    print({
+      "prompt": prompt,
+      if (n != null) "n": n,
+      if (size != null) "size": size.value,
+      if (model != null) "model": model.value,
+      if (responseFormat != null) "response_format": responseFormat.value,
+      if (user != null) "user": user,
+    });
 
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(endpoint + generations),
