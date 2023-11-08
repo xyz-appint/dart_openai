@@ -90,7 +90,7 @@ interface class OpenAIImages implements OpenAIImagesBase {
       "prompt": prompt,
       if (n != null) "n": n,
       if (size != null) "size": size.value,
-      if (model != null) "model": model.value,
+      // if (model != null) "model": model.value,
       if (responseFormat != null) "response_format": responseFormat.value,
       if (user != null) "user": user,
     });
