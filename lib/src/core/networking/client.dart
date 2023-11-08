@@ -404,6 +404,7 @@ abstract class OpenAINetworkingClient {
                   ); // Error cases sent from openai
                 }
               }
+<<<<<<< HEAD
             } // end of await for
           } catch (error, stackTrace) {
             yield* Stream<T>.error(
@@ -420,6 +421,24 @@ abstract class OpenAINetworkingClient {
       } catch (e) {
         yield* Stream<T>.error(e); // Error cases in getting response
       }
+=======
+            },
+            onDone: () {
+              close();
+            },
+            onError: (error, stackTrace) {
+              controller.addError(error, stackTrace);
+            },
+          );
+        },
+        onError: (error, stackTrace) {
+          controller.addError(error, stackTrace);
+        },
+      ).catchError((e) {
+        OpenAILogger.errorOcurred(e);
+        controller.addError(e);
+      });
+>>>>>>> fbedad4 (add image model params)
     } catch (e) {
       yield* Stream<T>.error(e); //Error cases in making request
     }
