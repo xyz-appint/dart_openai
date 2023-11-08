@@ -19,3 +19,5 @@ enum OpenAIAudioResponseFormat { json, text, srt, verbose_json, vtt }
 enum OpenAIAudioSpeechResponseFormat { mp3, opus, aac, flac }
 
 enum OpenAIChatMessageRole { system, user, assistant, function, tool }
+
+enum OpenAIDallEModel { DALL_E_2, DALL_E_3 }

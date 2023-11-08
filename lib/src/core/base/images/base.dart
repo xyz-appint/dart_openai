@@ -55,6 +55,12 @@ extension QualityToStingExtension on OpenAIImageQuality {
   }
 }
 
+extension ModelToStingExtension on OpenAIDallEModel {
+  String get value {
+    return this.name.toLowerCase().replaceAll("_", "-");
+  }
+}
+
 extension ResponseFormatToStingExtension on OpenAIImageResponseFormat {
   String get value {
     switch (this) {
