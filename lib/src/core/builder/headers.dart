@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:meta/meta.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
@@ -14,7 +15,7 @@ abstract class HeadersBuilder {
   /// {@endtemplate}
   static String? _apiKey;
 
-  static bool isAzure = false;
+  static bool _isAzure = false;
 
   /// {@template headers_builder_organization}
   /// This is used to store the organization id if it is set.
@@ -35,6 +36,10 @@ abstract class HeadersBuilder {
   @internal
   static String? get apiKey => _apiKey;
 
+
+  @internal
+  static bool get azure => _isAzure;
+
   @internal
   static set organization(String? organizationId) {
     _organization = organizationId;
@@ -43,7 +48,7 @@ abstract class HeadersBuilder {
 
   @internal
   static set azure(bool isAzure) {
-    isAzure = isAzure;
+    _isAzure = isAzure;
   }
 
   @internal
@@ -73,8 +78,8 @@ abstract class HeadersBuilder {
       ...headers,
       ..._additionalHeadersToRequests,
       if (isOrganizationSet) 'OpenAI-Organization': organization!,
-      "Authorization": "Bearer $apiKey",
-      "api-key": "$apiKey",
+      if(!_isAzure) "Authorization": "Bearer $apiKey",
+      if(_isAzure) "api-key": "$apiKey",
     };
 
     OpenAILogger.log(jsonEncode(headers));
