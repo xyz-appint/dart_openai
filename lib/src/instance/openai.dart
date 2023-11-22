@@ -116,6 +116,10 @@ final class OpenAI extends OpenAIClientBase {
     OpenAIConfig.baseUrl = baseUrl;
   }
 
+  static set version(String version) {
+    OpenAIConfig.version = version;
+  }
+
   static set isAzure(bool isAzure) {
     HeadersBuilder.azure = isAzure;
     OpenAIConfig.isAzure = isAzure;

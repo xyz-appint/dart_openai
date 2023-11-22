@@ -24,6 +24,8 @@ abstract class OpenAIConfig {
   /// {@endtemplate}
   static String? _baseUrl;
 
+  static String? _version;
+
   static bool? isAzure;
 
   // /// {@template openai_config_is_web}
@@ -34,7 +36,14 @@ abstract class OpenAIConfig {
   /// {@template openai_config_version}
   /// This is the version of the API.
   /// {@endtemplate}
-  static String get version => OpenAIStrings.version;
+
+  static String get version => _version ?? OpenAIStrings.version;
+
+  @internal
+  static set version(String version) {
+    _version = version;
+    OpenAILogger.logBaseUrl(_version);
+  }
 
   /// {@macro openai_config_base_url}
   @internal
@@ -47,4 +56,10 @@ abstract class OpenAIConfig {
     _baseUrl = baseUrl;
     OpenAILogger.logBaseUrl(_baseUrl);
   }
+
+// @internal
+// static set isWeb(bool isWeb) {
+//   _isWeb = isWeb;
+//   OpenAILogger.logIsWeb(_isWeb);
+// }
 }
