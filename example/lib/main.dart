@@ -5,6 +5,7 @@ import 'env/env.dart';
 Future<void> main() async {
   // Set the OpenAI API key from the .env file.
   OpenAI.apiKey = Env.apiKey;
+  OpenAI.isAzure = true;
 
   // Start using!
   final completion = await OpenAI.instance.completion.create(

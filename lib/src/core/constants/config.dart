@@ -24,6 +24,13 @@ abstract class OpenAIConfig {
   /// {@endtemplate}
   static String? _baseUrl;
 
+  static bool? isAzure;
+
+  // /// {@template openai_config_is_web}
+  // /// This is a flag that indicates if the library is running on the web or not.
+  // /// {@endtemplate}
+  // static bool _isWeb = false;
+
   /// {@template openai_config_version}
   /// This is the version of the API.
   /// {@endtemplate}

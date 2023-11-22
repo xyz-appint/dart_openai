@@ -116,6 +116,11 @@ final class OpenAI extends OpenAIClientBase {
     OpenAIConfig.baseUrl = baseUrl;
   }
 
+  static set isAzure(bool isAzure) {
+    HeadersBuilder.azure = isAzure;
+    OpenAIConfig.isAzure = isAzure;
+  }
+
   /// If you have multiple organizations, you can set it's id with this.
   /// once this is set, it will be used in all the requests to the OpenAI API.
   ///

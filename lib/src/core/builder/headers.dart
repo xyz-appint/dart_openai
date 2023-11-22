@@ -12,6 +12,8 @@ abstract class HeadersBuilder {
   /// {@endtemplate}
   static String? _apiKey;
 
+  static bool? isAzure;
+
   /// {@template headers_builder_organization}
   /// This is used to store the organization id if it is set.
   /// {@endtemplate}
@@ -35,6 +37,11 @@ abstract class HeadersBuilder {
   static set organization(String? organizationId) {
     _organization = organizationId;
     OpenAILogger.logOrganization(_organization);
+  }
+
+  @internal
+  static set azure(bool isAzure) {
+    isAzure = isAzure;
   }
 
   @internal
@@ -64,7 +71,8 @@ abstract class HeadersBuilder {
       ...headers,
       ..._additionalHeadersToRequests,
       if (isOrganizationSet) 'OpenAI-Organization': organization!,
-      "Authorization": "Bearer $apiKey",
+      if(isAzure??!false) "Authorization": "Bearer $apiKey",
+      if(isAzure??!true) "api-key": "$apiKey",
     };
 
     return headers;
