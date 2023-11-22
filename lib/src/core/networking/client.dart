@@ -432,6 +432,7 @@ abstract class OpenAINetworkingClient {
           );
         },
         onError: (error, stackTrace) {
+          OpenAILogger.errorOcurred(stackTrace);
           controller.addError(error, stackTrace);
         },
       ).catchError((e) {
