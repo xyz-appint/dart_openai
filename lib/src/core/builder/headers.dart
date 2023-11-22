@@ -73,8 +73,8 @@ abstract class HeadersBuilder {
       ...headers,
       ..._additionalHeadersToRequests,
       if (isOrganizationSet) 'OpenAI-Organization': organization!,
-      if(!isAzure) "Authorization": "Bearer $apiKey",
-      if(isAzure) "api-key": "$apiKey",
+      "Authorization": "Bearer $apiKey",
+      "api-key": "$apiKey",
     };
 
     OpenAILogger.log(jsonEncode(headers));
