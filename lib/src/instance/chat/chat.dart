@@ -109,6 +109,7 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (topLogprobs != null) "top_logprobs": topLogprobs,
       },
       onSuccess: (Map<String, dynamic> response) {
+        print(response);
         return OpenAIChatCompletionModel.fromMap(response);
       },
       client: client,
