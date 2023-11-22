@@ -369,7 +369,6 @@ abstract class OpenAINetworkingClient {
               final data = value;
               OpenAILogger.log(data);
               respondData += data;
-
               final dataLines = data
                   .split("\n")
                   .where((element) => element.isNotEmpty)
