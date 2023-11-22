@@ -367,7 +367,7 @@ abstract class OpenAINetworkingClient {
             await for (final value
                 in stream.where((event) => event.isNotEmpty)) {
               final data = value;
-              OpenAILogger.log(data);
+              OpenAILogger.logResponseBody(data);
               respondData += data;
               final dataLines = data
                   .split("\n")
