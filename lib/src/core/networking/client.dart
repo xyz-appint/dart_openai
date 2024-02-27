@@ -1,17 +1,16 @@
 import "dart:async";
 import "dart:convert";
 import "dart:io";
-import "package:dart_openai/src/core/constants/config.dart";
-import "package:dart_openai/src/core/utils/extensions.dart";
 
 import 'package:dart_openai/dart_openai.dart';
 import "package:dart_openai/src/core/builder/headers.dart";
+import "package:dart_openai/src/core/constants/config.dart";
+import "package:dart_openai/src/core/utils/extensions.dart";
 import "package:dart_openai/src/core/utils/logger.dart";
 import "package:http/http.dart" as http;
 import "package:meta/meta.dart";
 
 import '../constants/strings.dart';
-
 import "../utils/streaming_http_client_default.dart"
     if (dart.library.js) 'package:dart_openai/src/core/utils/streaming_http_client_web.dart'
     if (dart.library.io) 'package:dart_openai/src/core/utils/streaming_http_client_io.dart';
@@ -367,8 +366,8 @@ abstract class OpenAINetworkingClient {
             await for (final value
                 in stream.where((event) => event.isNotEmpty)) {
               final data = value;
-              OpenAILogger.logResponseBody(data);
               respondData += data;
+
               final dataLines = data
                   .split("\n")
                   .where((element) => element.isNotEmpty)
@@ -404,7 +403,6 @@ abstract class OpenAINetworkingClient {
                   ); // Error cases sent from openai
                 }
               }
-<<<<<<< HEAD
             } // end of await for
           } catch (error, stackTrace) {
             yield* Stream<T>.error(
@@ -421,25 +419,6 @@ abstract class OpenAINetworkingClient {
       } catch (e) {
         yield* Stream<T>.error(e); // Error cases in getting response
       }
-=======
-            },
-            onDone: () {
-              close();
-            },
-            onError: (error, stackTrace) {
-              controller.addError(error, stackTrace);
-            },
-          );
-        },
-        onError: (error, stackTrace) {
-          OpenAILogger.errorOcurred(stackTrace);
-          controller.addError(error, stackTrace);
-        },
-      ).catchError((e) {
-        OpenAILogger.errorOcurred(e);
-        controller.addError(e);
-      });
->>>>>>> fbedad4 (add image model params)
     } catch (e) {
       yield* Stream<T>.error(e); //Error cases in making request
     }
