@@ -15,7 +15,7 @@ abstract class BaseApiUrlBuilder {
   @internal
   static String build(String endpoint, [String? id, String? query]) {
     final baseUrl = OpenAIConfig.baseUrl;
-    final version = OpenAIConfig.version;
+    final version = '';
     final isAzure = OpenAIConfig.isAzure;
     final usedEndpoint = _handleEndpointsStarting(endpoint);
 
@@ -28,8 +28,10 @@ abstract class BaseApiUrlBuilder {
     } else if (query != null) {
       apiLink += "?$query";
     }
-    if(isAzure == true){
-      !apiLink.contains("?") ? apiLink += "?api-version=${version}" : apiLink += "&api-version=${version}";
+    if (isAzure == true) {
+      !apiLink.contains("?")
+          ? apiLink += "?api-version=${version}"
+          : apiLink += "&api-version=${version}";
     }
 
     return apiLink;
