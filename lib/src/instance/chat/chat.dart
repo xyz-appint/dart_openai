@@ -1,13 +1,12 @@
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
+import 'package:http/http.dart' as http;
 
 import '../../core/base/chat/chat.dart';
 import '../../core/constants/strings.dart';
 import '../../core/models/chat/chat.dart';
 import '../../core/models/tool/tool.dart';
 import '../../core/utils/logger.dart';
-
-import 'package:http/http.dart' as http;
 
 /// {@template openai_chat}
 /// This class is responsible for handling all chat requests, such as creating a chat completion for the message(s).
@@ -109,7 +108,6 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (topLogprobs != null) "top_logprobs": topLogprobs,
       },
       onSuccess: (Map<String, dynamic> response) {
-        print(response);
         return OpenAIChatCompletionModel.fromMap(response);
       },
       client: client,
