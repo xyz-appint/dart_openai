@@ -3,15 +3,13 @@ import 'dart:io';
 import 'package:dart_openai/src/core/builder/base_api_url.dart';
 import 'package:dart_openai/src/core/models/image/image/image.dart';
 import 'package:dart_openai/src/core/networking/client.dart';
+import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import '../../core/base/images/base.dart';
 import '../../core/constants/strings.dart';
-
 import '../../core/enum.dart';
 import '../../core/utils/logger.dart';
-
-import 'package:http/http.dart' as http;
 
 /// {@template openai_images}
 /// The class that handles all the requests related to the images in the OpenAI API.
@@ -86,14 +84,14 @@ interface class OpenAIImages implements OpenAIImagesBase {
   }) async {
     final String generations = "/generations";
 
-    print({
+    OpenAILogger.log({
       "prompt": prompt,
       if (n != null) "n": n,
       if (size != null) "size": size.value,
       // if (model != null) "model": model.value,
       if (responseFormat != null) "response_format": responseFormat.value,
       if (user != null) "user": user,
-    });
+    }.toString());
 
     return await OpenAINetworkingClient.post(
       to: BaseApiUrlBuilder.build(endpoint + generations),
