@@ -202,7 +202,6 @@ interface class OpenAIChat implements OpenAIChatBase {
         if (responseFormat != null) "response_format": responseFormat,
       },
       onSuccess: (Map<String, dynamic> response) {
-        print(response);
         return OpenAIStreamChatCompletionModel.fromMap(response);
       },
       client: client,
