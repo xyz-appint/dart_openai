@@ -37,6 +37,21 @@ abstract class BaseApiUrlBuilder {
     return apiLink;
   }
 
+  @internal
+  static String buildClaude(String endpoint, [String? id, String? query]) {
+    final baseUrl = OpenAIConfig.baseUrl;
+    final usedEndpoint = _handleEndpointsStarting(endpoint);
+
+    String apiLink = "$baseUrl";
+    apiLink += "$usedEndpoint";
+    if (id != null) {
+      apiLink += "/$id";
+    } else if (query != null) {
+      apiLink += "?$query";
+    }
+    return apiLink;
+  }
+
   // This is used to handle the endpoints that don't start with a slash.
   static String _handleEndpointsStarting(String endpoint) {
     return endpoint.startsWith("/") ? endpoint : "/$endpoint";

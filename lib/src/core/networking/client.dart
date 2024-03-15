@@ -336,6 +336,94 @@ abstract class OpenAINetworkingClient {
     }
   }
 
+  static Stream<T> postClaudeStream<T>({
+    required String to,
+    required T Function(Map<String, dynamic>) onSuccess,
+    required Map<String, dynamic> body,
+    http.Client? client,
+  }) async* {
+    try {
+      final clientForUse = client ?? _streamingHttpClient();
+      final uri = Uri.parse(to);
+      final headers = HeadersBuilder.build();
+      final httpMethod = OpenAIStrings.postMethod;
+      final request = http.Request(httpMethod, uri);
+      request.headers.addAll(headers);
+      request.body = jsonEncode(body);
+
+      OpenAILogger.logStartRequest(to);
+      try {
+        final respond = await clientForUse.send(request);
+
+        try {
+          OpenAILogger.startReadStreamResponse();
+          final stream = respond.stream
+              .transform(utf8.decoder)
+              .transform(openAIChatStreamLineSplitter);
+
+          try {
+            String respondData = "";
+            await for (final value
+                in stream.where((event) => event.isNotEmpty)) {
+              final data = value;
+              respondData += data;
+
+              final dataLines = data
+                  .split("\n")
+                  .where((element) => element.isNotEmpty)
+                  .toList();
+
+              for (String line in dataLines) {
+                if (line.startsWith(OpenAIStrings.streamResponseStart)) {
+                  final String data = line.substring(6);
+                  if (data.contains(OpenAIStrings.streamResponseEnd)) {
+                    OpenAILogger.streamResponseDone();
+                    break;
+                  }
+                  final decoded = jsonDecode(data) as Map<String, dynamic>;
+                  yield onSuccess(decoded);
+                  continue;
+                }
+
+                Map<String, dynamic> decodedData = {};
+                try {
+                  decodedData = decodeToMap(respondData);
+                } catch (error) {/** ignore, data has not been received */}
+
+                if (doesErrorExists(decodedData)) {
+                  final error = decodedData[OpenAIStrings.errorFieldKey]
+                      as Map<String, dynamic>;
+                  var message = error[OpenAIStrings.messageFieldKey] as String;
+                  message = message.isEmpty ? jsonEncode(error) : message;
+                  final statusCode = respond.statusCode;
+                  final exception = RequestFailedException(message, statusCode);
+
+                  yield* Stream<T>.error(
+                    exception,
+                  ); // Error cases sent from openai
+                }
+              }
+            } // end of await for
+          } catch (error, stackTrace) {
+            yield* Stream<T>.error(
+              error,
+              stackTrace,
+            ); // Error cases in handling stream
+          }
+        } catch (error, stackTrace) {
+          yield* Stream<T>.error(
+            error,
+            stackTrace,
+          ); // Error cases in decoding stream from response
+        }
+      } catch (e) {
+        yield* Stream<T>.error(e); // Error cases in getting response
+      }
+    } catch (e) {
+      yield* Stream<T>.error(e); //Error cases in making request
+    }
+  }
+
   static Stream<T> postStream<T>({
     required String to,
     required T Function(Map<String, dynamic>) onSuccess,
