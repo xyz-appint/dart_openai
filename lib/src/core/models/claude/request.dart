@@ -1,4 +1,5 @@
 part 'request.g.dart';
+
 //
 // class ClaudeRequest {
 //   String? model;
@@ -17,9 +18,29 @@ part 'request.g.dart';
 //   Map<String, dynamic> toJson() => _$RequestToJson(this);
 // }
 
+class ClaudeMessageContent {
+  String type = 'text';
+  String? text;
+
+  ClaudeMessageContent({required this.type, this.text});
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'text': text,
+      };
+
+  ClaudeMessageContent fromJson(Map<String, dynamic> json) =>
+      ClaudeMessageContent(
+        type: json['type'] as String,
+        text: json['text'] ?? '',
+      );
+}
+
 class ClaudeMessage {
   String? role;
-  String? content;
+
+  // String? content;
+  List<ClaudeMessageContent> content;
 
   ClaudeMessage({required this.role, required this.content});
 

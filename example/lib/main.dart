@@ -12,7 +12,12 @@ Future<void> main() async {
 
   Claude.createMessageStream(
     model: 'claude-3-opus-20240229',
-    messages: [ClaudeMessage(role: 'user', content: 'HI')],
+    messages: [
+      ClaudeMessage(role: 'user', content: [
+        ClaudeMessageContent(type: 'text', text: 'HI'),
+        ClaudeMessageContent(type: 'text', text: 'Who are you?')
+      ]),
+    ],
     maxTokens: 1024,
   ).listen(
     (event) {
