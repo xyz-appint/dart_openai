@@ -14,14 +14,18 @@ Future<void> main() async {
     model: 'claude-3-opus-20240229',
     messages: [ClaudeMessage(role: 'user', content: 'HI')],
     maxTokens: 1024,
-  ).listen((event) {
-    onData(ClaudeResponse event) {}
-    onError() {
-      print('error');
-    }
-
-    onDone() {}
-  });
+  ).listen(
+    (event) {
+      print(event.toJson());
+    },
+    onError: (error) {
+      print('-----------error---------');
+      print(error);
+    },
+    onDone: () {
+      print('-----------done---------');
+    },
+  );
   //
   //
   // // Start using!

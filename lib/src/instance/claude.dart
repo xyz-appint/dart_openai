@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import '../../dart_openai.dart';
 import '../core/base/openai_client/base.dart';
 import '../core/constants/config.dart';
-import '../core/constants/strings.dart';
+import '../core/models/claude/claude_const.dart';
 import '../core/networking/client.dart';
 import '../core/utils/logger.dart';
 
@@ -77,8 +77,24 @@ final class Claude extends OpenAIClientBase {
         "max_tokens": maxTokens,
         if (temperature != null) "temperature": temperature,
       },
-      onSuccess: (Map<String, dynamic> response) {
-        return ClaudeResponse.fromJson(response);
+      onSuccess: (Map<String, dynamic> resp) {
+        final type = resp['type'];
+        if (type == "message_start") {
+          return ClaudeResponse(
+            id: resp['message']['id'],
+            type: type,
+            role: resp['message']['role'],
+            model: resp['message']['model'],
+            usage: ClaudeUsage.fromJson(resp['message']['usage']),
+          );
+        } else if (type == "content_block_delta") {
+          return ClaudeResponse(
+            type: type,
+            content: [ClaudeContent.fromJson(resp['delta'])],
+          );
+        }
+
+        return ClaudeResponse.fromJson(resp);
       },
       client: client,
     );
@@ -160,7 +176,7 @@ final class Claude extends OpenAIClientBase {
             await for (final value
                 in stream.where((event) => event.isNotEmpty)) {
               final data = value;
-              print(data);
+
               respondData += data;
 
               final dataLines = data
@@ -169,9 +185,12 @@ final class Claude extends OpenAIClientBase {
                   .toList();
 
               for (String line in dataLines) {
-                if (line.startsWith(OpenAIStrings.streamResponseStart)) {
+                if (line.startsWith(ClaudeConst.streamResponseEvent)) {
+                  continue;
+                }
+                if (line.startsWith(ClaudeConst.streamResponseStart)) {
                   final String data = line.substring(6);
-                  if (data.contains(OpenAIStrings.streamResponseEnd)) {
+                  if (data.contains(ClaudeConst.streamResponseEnd)) {
                     OpenAILogger.streamResponseDone();
                     break;
                   }
@@ -188,9 +207,9 @@ final class Claude extends OpenAIClientBase {
                 }
 
                 if (_doesErrorExists(decodedData)) {
-                  final error = decodedData[OpenAIStrings.errorFieldKey]
+                  final error = decodedData[ClaudeConst.errorFieldKey]
                       as Map<String, dynamic>;
-                  var message = error[OpenAIStrings.messageFieldKey] as String;
+                  var message = error[ClaudeConst.messageFieldKey] as String;
                   message = message.isEmpty ? jsonEncode(error) : message;
                   final statusCode = respond.statusCode;
                   final exception = RequestFailedException(message, statusCode);
@@ -222,7 +241,7 @@ final class Claude extends OpenAIClientBase {
   }
 
   static bool _doesErrorExists(Map<String, dynamic> decodedResponseBody) {
-    return decodedResponseBody[OpenAIStrings.errorFieldKey] != null;
+    return decodedResponseBody[ClaudeConst.errorFieldKey] != null;
   }
 
   static http.Client _streamingHttpClient() {
