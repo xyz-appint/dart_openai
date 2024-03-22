@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:ffi';
 
-import 'package:meta/meta.dart';
 import 'package:dart_openai/src/core/utils/logger.dart';
+import 'package:meta/meta.dart';
 
 /// {@template headers_builder}
 /// This class is responsible for building the headers for all the requests.
@@ -36,7 +35,6 @@ abstract class HeadersBuilder {
   @internal
   static String? get apiKey => _apiKey;
 
-
   @internal
   static bool get azure => _isAzure;
 
@@ -67,6 +65,7 @@ abstract class HeadersBuilder {
   static Map<String, String> build() {
     Map<String, String> headers = <String, String>{
       'Content-Type': 'application/json',
+      'x-portkey-provider': 'openai',
     };
 
     assert(
@@ -78,8 +77,8 @@ abstract class HeadersBuilder {
       ...headers,
       ..._additionalHeadersToRequests,
       if (isOrganizationSet) 'OpenAI-Organization': organization!,
-      if(!_isAzure) "Authorization": "Bearer $apiKey",
-      if(_isAzure) "api-key": "$apiKey",
+      if (!_isAzure) "Authorization": "Bearer $apiKey",
+      if (_isAzure) "api-key": "$apiKey",
     };
 
     OpenAILogger.log(jsonEncode(headers));
