@@ -65,7 +65,6 @@ abstract class HeadersBuilder {
   static Map<String, String> build() {
     Map<String, String> headers = <String, String>{
       'Content-Type': 'application/json',
-      'x-portkey-provider': 'openai',
     };
 
     assert(
