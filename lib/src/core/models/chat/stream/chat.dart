@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 
+import '../../../utils/logger.dart';
 import 'sub_models/choices/choices.dart';
 
 export 'sub_models/choices/choices.dart';
@@ -46,6 +47,7 @@ final class OpenAIStreamChatCompletionModel {
   /// {@macro openai_stream_chat_completion}
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIStreamChatCompletionModel] object.
   factory OpenAIStreamChatCompletionModel.fromMap(Map<String, dynamic> json) {
+    OpenAILogger.errorOcurred(json);
     return OpenAIStreamChatCompletionModel(
       id: json['id'],
       created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
