@@ -1,4 +1,5 @@
 import 'sub_models/delta.dart';
+
 export "sub_models/delta.dart";
 
 /// {@template openai_stream_chat_completion_choice}
@@ -34,7 +35,9 @@ final class OpenAIStreamChatCompletionChoiceModel {
     Map<String, dynamic> json,
   ) {
     return OpenAIStreamChatCompletionChoiceModel(
-      index: json['index'],
+      index: json['index'] is int
+          ? json['index']
+          : int.tryParse(json['index'].toString()) ?? json['index'],
       delta: OpenAIStreamChatCompletionChoiceDeltaModel.fromMap(json['delta']),
       finishReason: json['finish_reason'],
     );

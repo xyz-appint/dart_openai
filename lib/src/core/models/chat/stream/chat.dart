@@ -48,22 +48,21 @@ final class OpenAIStreamChatCompletionModel {
   /// This is used  to convert a [Map<String, dynamic>] object to a [OpenAIStreamChatCompletionModel] object.
   factory OpenAIStreamChatCompletionModel.fromMap(Map<String, dynamic> json) {
     OpenAILogger.logResponseBody(json);
-    try {
-      return OpenAIStreamChatCompletionModel(
-        id: json['id'],
-        created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
-        choices: (json['choices'] as List)
-            .map(
-              (choice) => OpenAIStreamChatCompletionChoiceModel.fromMap(choice),
-            )
-            .toList(),
-        systemFingerprint: json['system_fingerprint'],
-      );
-    } catch (error, stacktrace) {
-      OpenAILogger.logResponseBody(error);
-      OpenAILogger.logResponseBody(stacktrace);
-    }
-    return OpenAIStreamChatCompletionModel.fromMap({});
+    return OpenAIStreamChatCompletionModel(
+      id: json['id'],
+      created: DateTime.fromMillisecondsSinceEpoch(json['created'] * 1000),
+      choices: (json['choices'] as List)
+          .map(
+            (choice) => OpenAIStreamChatCompletionChoiceModel.fromMap(choice),
+          )
+          .toList(),
+      systemFingerprint: json['system_fingerprint'],
+    );
+    // } catch (error, stacktrace) {
+    //   OpenAILogger.logResponseBody(error);
+    //   OpenAILogger.logResponseBody(stacktrace);
+    // }
+    // return OpenAIStreamChatCompletionModel.fromMap({});
   }
 
 //! This don't need toMap()?
