@@ -7,8 +7,7 @@ Future<void> main() async {
   OpenAI.apiKey = Env.apiKey;
   OpenAI.isAzure = true;
 
-  // Claude.apiKey =
-  //     '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';
+  Claude.apiKey = '';
   Claude.baseUrl = 'https://api.anthropic.com/v1';
 
   Claude.createMessageStream(
