@@ -39,7 +39,7 @@ final class OpenAIStreamChatCompletionChoiceModel {
           ? json['index']
           : int.tryParse(json['index'].toString()) ?? json['index'],
       delta: OpenAIStreamChatCompletionChoiceDeltaModel.fromMap(json['delta']),
-      finishReason: json['finish_reason'],
+      finishReason: json['finish_reason'].toString(),
     );
   }
 
