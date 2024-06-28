@@ -59,7 +59,7 @@ class OpenAIChatCompletionChoiceMessageContentItemModel {
     String imageBase64,
   ) {
     return OpenAIChatCompletionChoiceMessageContentItemModel._(
-      type: 'image_base64',
+      type: 'image_url',
       imageBase64: imageBase64,
     );
   }
